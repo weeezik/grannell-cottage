@@ -14,6 +14,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '@/styles/calendar.css';
 import Navigation from '@/components/Navigation';
 import { useBookings } from '@/hooks/useBookings';
+import { checkOverlappingBookings } from '@/utils/bookingUtils';
+import Notification from '@/components/Notification';
 
 const locales = {
   'en-US': require('date-fns/locale/en-US'),
@@ -167,6 +169,7 @@ function BookingForm({ onSubmit, onCancel, initialStartDate, initialEndDate, onD
 
 interface BookingDetailsProps {
   booking: {
+    id: string;
     title: string;
     start: Date;
     end: Date;
@@ -174,9 +177,21 @@ interface BookingDetailsProps {
     notes?: string;
   };
   onClose: () => void;
+  onDelete: (id: string) => Promise<void>;
 }
 
-function BookingDetails({ booking, onClose }: BookingDetailsProps) {
+function BookingDetails({ booking, onClose, onDelete }: BookingDetailsProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this booking?')) {
+      setIsDeleting(true);
+      await onDelete(booking.id);
+      setIsDeleting(false);
+      onClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl p-8 max-w-xl w-full relative">
@@ -186,7 +201,7 @@ function BookingDetails({ booking, onClose }: BookingDetailsProps) {
           <div>
             <h3 className="text-xl text-stone-800 font-medium mb-2">Dates</h3>
             <p className="text-lg text-stone-600">
-              {format(booking.start, 'MMMM d, yyyy')} - {format(booking.end, 'MMMM d, yyyy')}
+              {format(new Date(booking.start), 'MMMM d, yyyy')} - {format(new Date(booking.end), 'MMMM d, yyyy')}
             </p>
           </div>
 
@@ -203,12 +218,21 @@ function BookingDetails({ booking, onClose }: BookingDetailsProps) {
           )}
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-full bg-stone-200 text-stone-800 py-4 px-6 rounded-lg text-xl hover:bg-stone-300 transition-colors"
-        >
-          Close
-        </button>
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            onClick={onClose}
+            className="w-full bg-stone-200 text-stone-800 py-4 px-6 rounded-lg text-xl hover:bg-stone-300 transition-colors"
+          >
+            Close
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="w-full bg-red-600 text-white py-4 px-6 rounded-lg text-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {isDeleting ? 'Deleting...' : 'Delete Booking'}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -217,7 +241,7 @@ function BookingDetails({ booking, onClose }: BookingDetailsProps) {
 export default function MembersArea() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { bookings, loading: bookingsLoading, addBooking } = useBookings();
+  const { bookings, loading: bookingsLoading, addBooking, deleteBooking } = useBookings();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
@@ -226,6 +250,10 @@ export default function MembersArea() {
     end: Date | null;
   }>({ start: null, end: null });
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -263,6 +291,21 @@ export default function MembersArea() {
     startDate: Date;
     endDate: Date;
   }) => {
+    // Check for overlapping bookings
+    const hasOverlap = checkOverlappingBookings(
+      bookingDetails.startDate,
+      bookingDetails.endDate,
+      bookings
+    );
+
+    if (hasOverlap) {
+      setNotification({
+        type: 'error',
+        message: 'This date range overlaps with an existing booking'
+      });
+      return;
+    }
+
     const result = await addBooking({
       title: `Booked by ${bookingDetails.name}`,
       start: bookingDetails.startDate.toISOString(),
@@ -274,8 +317,37 @@ export default function MembersArea() {
     if (result.success) {
       setShowBookingForm(false);
       setSelectedRange({ start: null, end: null });
+      setNotification({
+        type: 'success',
+        message: 'Booking created successfully!'
+      });
     } else {
-      console.error('Failed to add booking');
+      setNotification({
+        type: 'error',
+        message: 'Failed to create booking. Please try again.'
+      });
+    }
+  };
+
+  const handleDeleteBooking = async (bookingId: string) => {
+    try {
+      const result = await deleteBooking(bookingId);
+      if (result.success) {
+        setNotification({
+          type: 'success',
+          message: 'Booking deleted successfully!'
+        });
+      } else {
+        setNotification({
+          type: 'error',
+          message: 'Failed to delete booking. Please try again.'
+        });
+      }
+    } catch (error) {
+      setNotification({
+        type: 'error',
+        message: 'An error occurred while deleting the booking.'
+      });
     }
   };
 
@@ -353,6 +425,14 @@ export default function MembersArea() {
             />
           )}
 
+          {notification && (
+            <Notification
+              message={notification.message}
+              type={notification.type}
+              onClose={() => setNotification(null)}
+            />
+          )}
+
           {showBookingDetails && selectedBooking && (
             <BookingDetails
               booking={selectedBooking}
@@ -360,6 +440,7 @@ export default function MembersArea() {
                 setShowBookingDetails(false);
                 setSelectedBooking(null);
               }}
+              onDelete={handleDeleteBooking}
             />
           )}
         </div>
