@@ -18,15 +18,7 @@ export default function Navigation() {
             pathname === '/about' ? 'text-[#1a472a]' : ''
           }`}
         >
-          about us
-        </Link>
-        <Link 
-          href="/history" 
-          className={`text-stone-800 hover:text-[#1a472a] transition-colors ${
-            pathname === '/history' ? 'text-[#1a472a]' : ''
-          }`}
-        >
-          history
+          About Us
         </Link>
         <Link 
           href="/members" 
@@ -34,7 +26,7 @@ export default function Navigation() {
             pathname === '/members' ? 'text-[#1a472a]' : ''
           }`}
         >
-          for members
+          For Members
         </Link>
         <Link 
           href="/archive" 
@@ -42,7 +34,7 @@ export default function Navigation() {
             pathname === '/archive' ? 'text-[#1a472a]' : ''
           }`}
         >
-          archive
+          Archive
         </Link>
         <Link 
           href="/contact" 
@@ -50,7 +42,7 @@ export default function Navigation() {
             pathname === '/contact' ? 'text-[#1a472a]' : ''
           }`}
         >
-          contact
+          Contact
         </Link>
       </div>
     </nav>
