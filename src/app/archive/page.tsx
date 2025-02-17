@@ -7,7 +7,7 @@ export default function Archive() {
     { src: '/images/archive/cascobaymap.jpg', alt: 'Historical map of Casco Bay' },
     { src: '/images/archive/familyporchbw.jpg', alt: 'Family gathering on the porch - black and white' },
     { src: '/images/archive/folksonporchbw.jpg', alt: 'Folks relaxing on the porch - black and white' },
-    { src: '/images/archive/kianaandywalkingcolor.jpg', alt: 'Kiana and Andy walking - color photo' },
+    { src: '/images/archive/kianaandywalkincolor.jpg', alt: 'Kiana and Andy walking - color photo' },
     { src: '/images/archive/porchcolor.jpg', alt: 'The cottage porch in color' },
   ];
 
