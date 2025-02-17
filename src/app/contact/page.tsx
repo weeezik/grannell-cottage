@@ -119,7 +119,7 @@ export default function Contact() {
 
           {status === 'success' && (
             <div className="text-green-600 text-center mt-4">
-              Thank you for your message. We'll get back to you soon!
+              Thank you for your message. We&apos;ll get back to you soon!
             </div>
           )}
 

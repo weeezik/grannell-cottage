@@ -7,27 +7,21 @@ import Navigation from '@/components/Navigation';
 
 export default function Login() {
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    
+    const result = await signIn('credentials', {
+      password,
+      redirect: false,
+    });
 
-    try {
-      const result = await signIn('credentials', {
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError('Invalid password');
-      } else {
-        router.push('/members');
-        router.refresh();
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+    if (result?.ok) {
+      router.push('/members');
+      router.refresh();
+    } else {
+      setPassword('');
     }
   };
 
@@ -54,12 +48,6 @@ export default function Login() {
               required
             />
           </div>
-
-          {error && (
-            <div className="text-red-600 text-sm mb-4">
-              {error}
-            </div>
-          )}
 
           <button
             type="submit"

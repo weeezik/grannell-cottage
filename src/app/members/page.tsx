@@ -10,6 +10,7 @@ import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
+import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '@/styles/calendar.css';
 import Navigation from '@/components/Navigation';
@@ -18,7 +19,7 @@ import { checkOverlappingBookings } from '@/utils/bookingUtils';
 import Notification from '@/components/Notification';
 
 const locales = {
-  'en-US': require('date-fns/locale/en-US'),
+  'en-US': enUS,
 };
 
 const localizer = dateFnsLocalizer({
@@ -239,12 +240,22 @@ function BookingDetails({ booking, onClose, onDelete }: BookingDetailsProps) {
 }
 
 export default function MembersArea() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const { bookings, loading: bookingsLoading, addBooking, deleteBooking } = useBookings();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
+  
+  interface BookingType {
+    id: string;
+    title: string;
+    start: Date;
+    end: Date;
+    member: string;
+    notes?: string;
+  }
+  
+  const [selectedBooking, setSelectedBooking] = useState<BookingType | null>(null);
   const [selectedRange, setSelectedRange] = useState<{
     start: Date | null;
     end: Date | null;
@@ -265,7 +276,14 @@ export default function MembersArea() {
     console.log('Current bookings:', bookings);
   }, [bookings]);
 
-  const handleSelectSlot = (slotInfo: any) => {
+  interface SlotInfo {
+    start: Date;
+    end: Date;
+    slots: Date[];
+    action: 'select' | 'click' | 'doubleClick';
+  }
+
+  const handleSelectSlot = (slotInfo: SlotInfo) => {
     if (!selectedRange.start) {
       setSelectedRange({
         start: slotInfo.start,
@@ -280,7 +298,7 @@ export default function MembersArea() {
     }
   };
 
-  const handleSelectEvent = (event: any) => {
+  const handleSelectEvent = (event: BookingType) => {
     setSelectedBooking(event);
     setShowBookingDetails(true);
   };
@@ -291,40 +309,48 @@ export default function MembersArea() {
     startDate: Date;
     endDate: Date;
   }) => {
-    // Check for overlapping bookings
-    const hasOverlap = checkOverlappingBookings(
-      bookingDetails.startDate,
-      bookingDetails.endDate,
-      bookings
-    );
+    try {
+      // Check for overlapping bookings
+      const hasOverlap = checkOverlappingBookings(
+        bookingDetails.startDate,
+        bookingDetails.endDate,
+        bookings
+      );
 
-    if (hasOverlap) {
+      if (hasOverlap) {
+        setNotification({
+          type: 'error',
+          message: 'This date range overlaps with an existing booking'
+        });
+        return;
+      }
+
+      const result = await addBooking({
+        title: `Booked by ${bookingDetails.name}`,
+        start: bookingDetails.startDate.toISOString(),
+        end: endOfDay(bookingDetails.endDate).toISOString(),
+        member: bookingDetails.name,
+        notes: bookingDetails.notes
+      });
+
+      if (result.success) {
+        setShowBookingForm(false);
+        setSelectedRange({ start: null, end: null });
+        setNotification({
+          type: 'success',
+          message: 'Booking created successfully!'
+        });
+      } else {
+        setNotification({
+          type: 'error',
+          message: 'Failed to create booking. Please try again.'
+        });
+      }
+    } catch (err) {
+      console.error('Error submitting booking:', err);
       setNotification({
         type: 'error',
-        message: 'This date range overlaps with an existing booking'
-      });
-      return;
-    }
-
-    const result = await addBooking({
-      title: `Booked by ${bookingDetails.name}`,
-      start: bookingDetails.startDate.toISOString(),
-      end: endOfDay(bookingDetails.endDate).toISOString(),
-      member: bookingDetails.name,
-      notes: bookingDetails.notes
-    });
-
-    if (result.success) {
-      setShowBookingForm(false);
-      setSelectedRange({ start: null, end: null });
-      setNotification({
-        type: 'success',
-        message: 'Booking created successfully!'
-      });
-    } else {
-      setNotification({
-        type: 'error',
-        message: 'Failed to create booking. Please try again.'
+        message: 'An error occurred while submitting the booking. Please try again later.'
       });
     }
   };
