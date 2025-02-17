@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Grannell Cottage',
-  description: 'Grannell Cottage is a holiday rental property located in the heart of the Cotswolds.'
+  description: 'Grannell Cottage is an ancestral home located in Casco Bay, Maine.'
 };
 
 export default function RootLayout({
