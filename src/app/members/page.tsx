@@ -346,8 +346,8 @@ export default function MembersArea() {
           message: 'Failed to create booking. Please try again.'
         });
       }
-    } catch (err) {
-      console.error('Error submitting booking:', err);
+    } catch (_err) {
+      console.error('Error submitting booking:', _err);
       setNotification({
         type: 'error',
         message: 'An error occurred while submitting the booking. Please try again later.'
