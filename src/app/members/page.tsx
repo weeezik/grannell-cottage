@@ -41,6 +41,20 @@ function BookingForm({ onSubmit, onCancel, initialStartDate, initialEndDate, onD
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
 
+  // Helper function to handle timezone issues
+  const formatDateForInput = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Helper function to parse date strings without timezone issues
+  const parseInputDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day, 12); // Set to noon to avoid timezone issues
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
@@ -51,46 +65,58 @@ function BookingForm({ onSubmit, onCancel, initialStartDate, initialEndDate, onD
     });
   };
 
+  const handleDateChange = (type: 'start' | 'end', dateString: string) => {
+    const date = parseInputDate(dateString);
+    
+    if (type === 'start') {
+      setStartDate(date);
+      if (date > endDate) {
+        setEndDate(date);
+        onDateChange('end', date);
+      }
+    } else {
+      setEndDate(date);
+      if (date < startDate) {
+        setStartDate(date);
+        onDateChange('start', date);
+      }
+    }
+    onDateChange(type, date);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl p-8 max-w-xl w-full relative">
         <h2 className="text-4xl font-serif text-stone-800 mb-6">Book Your Stay</h2>
         
-        <div className="mb-6 space-y-4">
-          <div>
-            <label className="block text-xl text-stone-800 mb-2 font-medium">
-              Start Date
-            </label>
-            <input
-              type="date"
-              value={format(startDate, 'yyyy-MM-dd')}
-              onChange={(e) => {
-                const newDate = new Date(e.target.value);
-                setStartDate(newDate);
-                onDateChange('start', newDate);
-              }}
-              className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#1a472a] focus:border-transparent text-lg text-stone-800"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-xl text-stone-800 mb-2 font-medium">
-              End Date
-            </label>
-            <input
-              type="date"
-              value={format(endDate, 'yyyy-MM-dd')}
-              onChange={(e) => {
-                const newDate = new Date(e.target.value);
-                setEndDate(newDate);
-                onDateChange('end', newDate);
-              }}
-              className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#1a472a] focus:border-transparent text-lg text-stone-800"
-            />
-          </div>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="mb-6 space-y-4">
+            <div>
+              <label className="block text-xl text-stone-800 mb-2 font-medium">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={formatDateForInput(startDate)}
+                onChange={(e) => handleDateChange('start', e.target.value)}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#1a472a] focus:border-transparent text-lg text-stone-800"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xl text-stone-800 mb-2 font-medium">
+                End Date
+              </label>
+              <input
+                type="date"
+                value={formatDateForInput(endDate)}
+                onChange={(e) => handleDateChange('end', e.target.value)}
+                className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#1a472a] focus:border-transparent text-lg text-stone-800"
+                min={formatDateForInput(startDate)}
+              />
+            </div>
+          </div>
+
           <div>
             <label htmlFor="name" className="block text-xl text-stone-800 mb-2 font-medium">
               Your Name
