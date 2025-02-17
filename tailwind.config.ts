@@ -12,6 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      ontFamily: {
+        sans: ['var(--font-geist)'],
+        mono: ['var(--font-geist-mono)'],
+      },
     },
   },
   plugins: [],
