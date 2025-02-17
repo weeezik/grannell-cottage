@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Grannell Cottage
+
+A private booking system for Grannell Cottage, an ancestral homestead located on Chebeague Island, Maine. This web application allows family members to view and book stays at the cottage.
+
+## Features
+
+- 🏠 **Member-only Access**: Secure login system for family members
+- 📅 **Interactive Calendar**: View availability and make bookings
+- 📝 **Booking Management**: Create and view booking details
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+## Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Calendar**: [React Big Calendar](https://github.com/jquense/react-big-calendar)
+- **Date Handling**: [date-fns](https://date-fns.org/)
+- **TypeScript**: For type safety and better developer experience
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- Git
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/grannell-cottage.git
+cd grannell-cottage
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env.local` file and add your environment variables:
+
+```bash
+cp .env.example .env.local
+```
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key
+MEMBERS_PASSWORD=your-members-password
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open your browser and navigate to `http://localhost:3000` to access the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+grannell-cottage/
+├── src/
+│ ├── app/ # Pages
+│ ├── components/ # Reusable components
+│ ├── styles/ # Global styles
+│ └── utils/ # Utility functions
+```
 
-## Learn More
+## Key Features Explained
 
-To learn more about Next.js, take a look at the following resources:
+### Authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Uses NextAuth.js for secure authentication
+- Single password protection for all family members
+- Protected routes for member-only access
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Booking System
 
-## Deploy on Vercel
+- Interactive calendar interface
+- Date range selection
+- Booking details with notes
+- View existing bookings
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Calendar Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Month-by-month navigation
+- Today button for quick navigation
+- Visual indicators for:
+  - Selected dates
+  - Existing bookings
+  - Current date
+
+## Deployment
+
+
+### Code Style
+- Uses ESLint for code linting
+- Prettier for code formatting
+- TypeScript for type checking
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## Environment Variables
+
+Required environment variables:
+
+- `NEXTAUTH_URL`: Full URL of your application
+- `NEXTAUTH_SECRET`: Random string for session encryption
+- `MEMBERS_PASSWORD`: Password for member access
+
+## License
+
+Private - All Rights Reserved
+
+## Support
+
+For support, please contact [Your Contact Information]
+
+## Future Enhancements
+
+- [ ] Database integration for persistent storage
+- [ ] Email notifications for bookings
+- [ ] Booking cancellation functionality
+- [ ] Calendar export feature
+- [ ] User profiles
+

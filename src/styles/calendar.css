@@ -54,9 +54,53 @@
   color: #44403c;
 }
 
+/* Off-range dates */
+.rbc-off-range-bg {
+  background-color: #e5e7eb !important;
+}
+
+.rbc-off-range {
+  color: #94a3b8 !important;
+  font-weight: 600;
+}
+
 /* Today's date */
 .rbc-today {
-  background-color: #f5f7f0;
+  background-color: #1a472a15 !important;
+}
+
+.rbc-date-cell.rbc-now {
+  font-weight: 700;
+  color: #1a472a;
+}
+
+/* Selected day styling */
+.selected-day {
+  position: relative;
+  background-color: #1a472a30 !important;
+}
+
+.selected-day .rbc-date-cell {
+  color: #1a472a;
+}
+
+.selected-day:hover {
+  background-color: #1a472a40 !important;
+}
+
+/* Optional: Add a subtle border to connect selected days */
+.selected-day:not(:first-of-type):not(:last-of-type) {
+  border-radius: 0 !important;
+}
+
+.selected-day:first-of-type {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.selected-day:last-of-type {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 /* Events */
@@ -68,11 +112,6 @@
 
 .rbc-event.rbc-selected {
   background-color: #143620;
-}
-
-/* Off-range dates */
-.rbc-off-range-bg {
-  background-color: #f8fafc;
 }
 
 /* Time grid */
