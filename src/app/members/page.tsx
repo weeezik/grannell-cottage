@@ -369,7 +369,7 @@ export default function MembersArea() {
           message: 'Failed to delete booking. Please try again.'
         });
       }
-    } catch (error) {
+    } catch (_) {
       setNotification({
         type: 'error',
         message: 'An error occurred while deleting the booking.'
