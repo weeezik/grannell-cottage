@@ -11,7 +11,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto mb-16">
           <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden shadow-2xl">
             <Image
-              src="/grannellcottage1.jpg"
+              src="/grannell-cottage1.jpg"
               alt="Grannell Cottage"
               fill
               priority
