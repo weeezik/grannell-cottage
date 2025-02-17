@@ -21,9 +21,9 @@ export default function Navigation() {
           About Us
         </Link>
         <Link 
-          href="/members" 
+          href="/login" 
           className={`text-stone-800 hover:text-[#1a472a] transition-colors ${
-            pathname === '/members' ? 'text-[#1a472a]' : ''
+            pathname === '/login' ? 'text-[#1a472a]' : ''
           }`}
         >
           For Members

@@ -9,6 +9,7 @@ import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import '@/styles/calendar.css';
 import Navigation from '@/components/Navigation';
 
 const locales = {
@@ -62,6 +63,8 @@ export default function MembersArea() {
             endAccessor="end"
             style={{ height: 600 }}
             className="mb-8"
+            views={['month']}
+            defaultView="month"
           />
           
           <div className="mt-8">
