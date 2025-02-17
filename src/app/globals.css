@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-color: #4a5568;  /* slate gray */
+  --accent-color: #8b5e3c;   /* warm brown */
+  --background-color: #faf9f7; /* off-white */
 }
 
 @media (prefers-color-scheme: dark) {
