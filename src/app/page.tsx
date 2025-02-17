@@ -10,10 +10,13 @@ export default function Home() {
         {/* Hero Section */}
         <div className="max-w-6xl mx-auto mb-16">
           <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden shadow-2xl">
-            <img
+            <Image
               src="/grannellcottage1.jpg"
               alt="Grannell Cottage"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              fill
+              priority
+              className="object-cover hover:scale-105 transition-transform duration-700"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             />
           </div>
         </div>
