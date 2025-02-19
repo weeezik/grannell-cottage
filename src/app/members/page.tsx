@@ -242,7 +242,7 @@ function BookingDetails({ booking, onClose, onDelete }: BookingDetailsProps) {
 export default function MembersArea() {
   const { status } = useSession();
   const router = useRouter();
-  const { bookings, loading, error } = useBookings();
+  const { bookings, loading: bookingsLoading, addBooking, deleteBooking } = useBookings();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
   
@@ -273,10 +273,8 @@ export default function MembersArea() {
   }, [status, router]);
 
   useEffect(() => {
-    console.log('Loading state:', loading);
-    console.log('Error state:', error);
-    console.log('Bookings:', bookings);
-  }, [loading, error, bookings]);
+    console.log('Current bookings:', bookings);
+  }, [bookings]);
 
   interface SlotInfo {
     start: Date;
@@ -398,16 +396,12 @@ export default function MembersArea() {
     return {};
   };
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading' || bookingsLoading) {
     return (
       <div className="min-h-screen bg-[#f5f7f0] flex items-center justify-center">
         <div className="text-xl text-stone-800">Loading...</div>
       </div>
     );
-  }
-
-  if (error) {
-    return <div>Error loading bookings: {error.message}</div>;
   }
 
   return (
