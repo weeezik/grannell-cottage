@@ -23,7 +23,7 @@ export default function About() {
           <div className="p-8 md:p-12">
             <p className="text-xl text-stone-700 leading-relaxed mb-8 font-serif">
               Grannell Cottage is an ancestral homestead located on Chebeague Island, Maine
-              in the Casco Bay. The home serves as a summer time retreat for descendants of Andrew 
+              in the Casco Bay. The home serves as a summer time retreat for descendants of CharlesAndrew 
               Grannell - the home&apos;s constructor and first tenant.
             </p>
             
@@ -39,7 +39,7 @@ export default function About() {
               <div className="bg-[#f5f7f0] p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <h2 className="text-2xl font-serif text-stone-800 mb-4">Heritage</h2>
                 <p className="text-stone-700 leading-relaxed">
-                  Built by Andrew Grannell, the cottage has been passed down through 
+                  Built by Charles Andrew Grannell, the cottage has been passed down through 
                   generations, maintaining its role as a cherished family gathering place.
                 </p>
               </div>
