@@ -36,7 +36,7 @@ export default function Home() {
           <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
             <h2 className="text-2xl font-serif text-stone-800 mb-4">Our History</h2>
             <p className="text-stone-700 mb-4">
-              Built by Andrew Grannell, our cottage has been a family gathering place for generations.
+              Built by Charles Andrew Grannell, our cottage has been a family gathering place for generations.
             </p>
             <Link 
               href="/about"
