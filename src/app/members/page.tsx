@@ -414,9 +414,6 @@ export default function MembersArea() {
             <span className="absolute top-150 right-12 z-10 text-sm sm:text-base text-stone-600">
               📅 Click a date to book your stay
             </span>
-          {/* <p className="text-lg text-stone-600 mb-4">
-            📅 Click a date to book your stay
-          </p> */}
 
           <Calendar
             localizer={localizer}
