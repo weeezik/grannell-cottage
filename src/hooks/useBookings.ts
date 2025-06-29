@@ -38,7 +38,6 @@ export function useBookings() {
   const addBooking = async (booking: Omit<Booking, 'id'>) => {
     try {
       const bookingsRef = ref(database, 'bookings');
-      console.log("Booking to push:", booking);
       await push(bookingsRef, booking);
       return { success: true };
     } catch (error) {
