@@ -38,12 +38,13 @@ export function useBookings() {
   const addBooking = async (booking: Omit<Booking, 'id'>) => {
     try {
       const bookingsRef = ref(database, 'bookings');
+      console.log("Booking to push:", booking);
       await push(bookingsRef, booking);
       return { success: true };
     } catch (error) {
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Failed to add booking' 
+        error: error instanceof Error ? error.message : console.log(`Failed to add booking. ${error}`)
       };
     }
   };
