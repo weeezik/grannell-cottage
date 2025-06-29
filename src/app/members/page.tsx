@@ -409,8 +409,15 @@ export default function MembersArea() {
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-serif text-stone-800 mb-8">Members Area</h1>
+        <div className="flex justify-between items-center flex-wrap mb-4">
+          <h2 className="text-lg font-medium text-stone-800">📅 Click a date to book your stay</h2>
+        </div>
         
         <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* <p className="text-lg text-stone-600 mb-4">
+            📅 Click a date to book your stay
+          </p> */}
+
           <Calendar
             localizer={localizer}
             events={bookings.map(booking => ({
